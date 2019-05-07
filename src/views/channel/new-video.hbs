@@ -1,0 +1,29 @@
+<div class="container p-3">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/new-video" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Título</label>
+                            <input type="text" name="title" class="form-control" aria-describedby="emailHelp" placeholder="Título del video" value="{{ v_title }}" required autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Descripción</label>
+                            <textarea class="form-control" name="description" rows="3">{{ description }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Video (Formatos soportados: MP4, AVI, MKV)</label>
+                            <input type="file" name="video" class="form-control-file" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Miniatura (Formatos soportados: JPG, PNG, PNEG)</label>
+                            <input type="file" name="thumbnail" class="form-control-file">
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Publicar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

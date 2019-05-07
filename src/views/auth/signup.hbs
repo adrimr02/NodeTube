@@ -1,0 +1,36 @@
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <div class="card text-center">
+                <div class="card-header">
+                    <h3>Registro</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/signup" method="POST">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="username" placeholder="Nombre de usuario" value="{{username}}" autofocus required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="email" placeholder="Email" value="{{email}}" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="channelname" placeholder="Nombre del canal" value="{{ channelname }}" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" placeholder="Contraseña" value="{{password}}" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="confirm_password" placeholder="Repetir contraseña" required>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success">
+                                Registrarse
+                            </button>
+                        </div>
+                    </form>
+                    <div class="card-body"><small>¿Ya tienes una cuenta? Inicia sesión <a href="/signin">aqui</a></small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

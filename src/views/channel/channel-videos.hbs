@@ -1,0 +1,26 @@
+<div class="card mt-2">
+    <div class="card-header bg-dark text-white">
+        <h3>Videos</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            {{#each videos}}
+            <div class="col-md-4">
+                <a href="/video/{{_id}}">
+                    <img src="/thumbnails/{{thumbnail_filename}}" width="40%" height="40%" class="img-thumbnail">
+                    <div class="text-secondary">
+                        <h4>{{title}}</h4>
+                        <h6>{{views}} visualizaciones</h6>
+                        <small>{{timeago created_at}}</small>
+                    </div>
+                </a>
+                {{#if own_channel}}
+                <div class="dropdown-divider"></div>
+                <a href="/delete/{{_id}}" class="btn btn-danger">Borrar</a>
+                <a href="/edit/{{_id}}" class="btn btn-success">Editar</a>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>

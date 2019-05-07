@@ -1,0 +1,25 @@
+<div class="container p-4">
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <div class="card text-center">
+                <div class="card-header">
+                    <h3>Iniciar sesión</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/signin" method="POST">
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="email" placeholder="Correo electrónico" value="{{ email }}" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" placeholder="Contraseña">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success">Entrar</button>
+                      </div>
+                    </form>
+                    <div class="card-body"><small>¿No tiene una cuenta? Crea una <a href="/signup">aqui</a></small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

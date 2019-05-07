@@ -1,0 +1,68 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="/">NodeTube</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            {{#if logged}}
+            <li class="nav-item dropdown">
+                <div class="btn-group">
+                    <a href="/subscriptions" class="btn btn-primary">Subscripciones</a>
+                    <button type="button" class="btn dropdown-toggle dropdown-toggle-split btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Canal 1</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Canal 2</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Canal 3</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Canal 4</a>
+                    </div>
+                </div>
+            </li>
+            {{/if}}
+        </ul>
+        <div class="col-sm">
+        <form class="form-inline my-2 my-lg-0 input-group">
+            <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+        </form>
+        </div>
+        <ul class="navbar-nav ml-auto">
+            {{#if logged}}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ user }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    {{#if channel_test}}
+                    <a class="dropdown-item" href="/channel/{{ channel }}">Mi canal</a>
+                    {{/if}}
+                    {{#if settings}}
+                    <a class="dropdown-item" href="/settings">Ajustes</a>
+                    {{/if}}
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="nav-item">
+                    <a href="/logout" class="nav-link">Cerrar sesión</a>
+                </div>
+            </li>
+            {{else}}
+            <li class="nav-item">
+                <div class="nav-item">
+                    <a href="/signin" class="nav-link">Iniciar sesión</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <div class="nav-item">
+                    <a href="/signup" class="nav-link">Registrarse</a>
+                </div>
+            </li>
+            {{/if}}
+        </ul>
+    </div>
+</nav>

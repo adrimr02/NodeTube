@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="card mt-2 p-2">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3>Configuración del canal</h3>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                {{#each videos}}
+                <div class="list-group-item">
+                    <div class="row">
+                        <h5>{{title}}</h5>
+                        <img src="/thumbnails/{{thumbnail_filename}}" class="w-25 h-25">
+                        <blockquote class="col">
+                            <p class="lead">
+                                <button class="btn btn-danger" id="delete-video" data-id="{{_id}}">Borrar video</button>
+                                <button class="btn btn-success" id="update-video" data-id="{{_id}}">Modificar video</button>
+                            </p>
+                            <footer class="blockquote-footer">
+                                {{timeago created_at}}
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>

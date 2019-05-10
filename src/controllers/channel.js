@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
-const { Channel, Video } = require('../models');
+const { Channel, Video, Comment } = require('../models');
 const libs = require('../helpers/libs');
 
 ctrl = {}
@@ -8,15 +8,23 @@ ctrl = {}
 ctrl.video = async (req, res) => {
     const id = req.params.id;
     const video = await Video.findOne({_id: id})
+    const comments = await Comment.find({video_id: id}).sort({posted_at: -1});
+    const v_comments = await libs.commentMaker(comments);
     var {views} = video;
     const {channel} = video
     const v_channel = await Channel.findOne({channel: channel});
     var c_views = v_channel.views;
     const v_id = v_channel._id;
+    var liked = false;
     views++;
     c_views++;
     await Video.findOneAndUpdate({_id: id, views: views});
     await Channel.findOneAndUpdate({_id: v_id, views: c_views});
+    if (video.likes_users.includes(req.session.user)) {
+        liked = true;
+    } else {
+        liked = false;
+    }
     res.render('channel/video', {
         title: 'NodeTube',
         channel_test: true,
@@ -25,9 +33,41 @@ ctrl.video = async (req, res) => {
         user: req.session.user,
         channel: req.session.channel,
         video,
+        liked,
         channel: v_channel,
+        comments: v_comments,
         id
     })
+}
+
+ctrl.comment = async (req, res) => {
+    const newComment = new Comment({
+        user: req.session.user,
+        video_id: req.params.id,
+        comment: req.body.comment 
+    });
+    if (!req.session.user) {
+        res.redirect(`/video/${req.params.id}`);
+    } else{
+        await newComment.save();
+        res.redirect(`/video/${req.params.id}`);
+    }
+}
+
+ctrl.like = async (req, res) => {
+    const video = await Video.findOne({_id: req.params.id});
+    if (video) {
+        if (req.session.user) {
+            if (video.likes_users.includes(req.session.user)) {
+                res.json({likes: video.likes + ' Ya has dado me gusta a este video'});
+            } else {
+                video.likes_users.push(req.session.user);
+                video.likes++;
+                await video.save();
+                res.json({likes: video.likes});
+            }
+        }
+    }
 }
 
 ctrl.view = async (req, res) => {
@@ -70,14 +110,11 @@ ctrl.channel = async (req, res) => {
     const channel = req.params.name;
     const { subscribers } = await Channel.findOne({channel});
     var own_channel = false;
-    console.log(channel);
-    console.log(req.params.name);
     if (req.session.channel === channel) {
         own_channel = true;
     } else {
         own_channel = false;
     }
-    console.log(own_channel);
     
     res.render('channel/channel', {
         title: 'NodeTube',
@@ -100,7 +137,6 @@ ctrl.channelVideos = async(req, res) => {
     } else {
         own_channel = false;
     }
-    console.log(own_channel);
     res.render('channel/channel-videos', {
         title: 'NodeTube',
         channel_test: false,
@@ -130,6 +166,29 @@ ctrl.channelInfo = (req, res) => {
         channel,
         own_channel
     });
+}
+
+ctrl.channelSettings = async (req, res) => {
+    const channel = req.params.name;
+    if (req.session.logged) {
+        if (channel === req.session.channel) {
+            const videos = await Video.find({channel: req.params.name}).sort({created_at: -1});
+            res.render('channel/settings', {
+                title: 'NodeTube',
+                logged: req.session.logged,
+                settings: true,
+                channel_test: false,
+                channel: req.session.channel,
+                user: req.session.user,
+                own_channel: true,
+                videos
+            });
+        } else {
+            res.redirect('/');
+        }
+    } else {
+        res.redirect('/');
+    }
 }
 
 ctrl.newVideo = async (req, res) => {
@@ -197,8 +256,26 @@ ctrl.uploadVideo = async (req, res) => {
         }
 }
 
-ctrl.deleteVideo = (req, res) => {
+ctrl.deleteVideo = async (req, res) => {
+    const video_id = req.params.id;
+    const video = await Video.findOne({_id: video_id});
+    if (video.channel === req.session.channel) {
+        if (video) {
+            await fs.unlink(path.resolve('./src/public/videos/' + video.video_filename));
+            await fs.unlink(path.resolve('./src/public/thumbnails/' + video.thumbnail_filename));
+            await Comment.deleteMany({video_id});
+            await Video.findOneAndDelete({_id: video_id});
+            res.json({deleted: true});
+        } else {
+            res.json({deleted: false});
+        }
+    } else {
+        res.json({deleted: false});
+    }
+}
 
+ctrl.subscribe = (req, res) => {
+    
 }
 
 module.exports = ctrl;

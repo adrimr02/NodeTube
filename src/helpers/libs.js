@@ -1,5 +1,5 @@
 const uuid = require('uuid/v4');
-const { Video } = require('../models');
+const { Video, User, Channel, Comment } = require('../models');
 
 ctrl = {}
 
@@ -29,9 +29,23 @@ ctrl.validName = async (videoExt, thumbExt) => {
     }
     const video_filename = await videoName(videoExt);
     const thumbnail_filename = await thumbName(thumbExt);
-    console.log(video_filename);
-    console.log(thumbnail_filename);
     return { video_filename, thumbnail_filename };
 }
 
+ctrl.commentMaker = async (comments) => {
+    var video_comments = []
+    for (var i = 0; i<comments.length; i++) {
+        comment = comments[i];
+        comment_user = await User.findOne({username: comment.user});
+        video_comments.push({
+            comment_id: comment._id,
+            video_id: comment.video_id,
+            comment: comment.comment,
+            posted_at: comment.posted_at,
+            username: comment_user.username,
+            user_channel: comment_user.channel
+        });
+    }
+    return video_comments;
+}
 module.exports = ctrl;

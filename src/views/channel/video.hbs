@@ -5,32 +5,80 @@
                 <source src="http://localhost:3000/view/{{id}}"  type="video/mp4">
             </video>
         </div>
-        <div class="card-body ml-2">
-            <h2>{{video.title}}</h2>
+        <div class="card-body">
+            <h2>{{video.title}}</h2><br/>
             <small>{{video.views}} visualizaciones</small>
+            <div class="mt-1 ml-2">
+                {{#if liked}}
+                <button class="btn btn-success" id="btn-like" data-id="{{video._id}}" disabled><i class="fas fa-thumbs-up"></i><span> {{video.likes}} Ya has dado me gusta</span></button>
+                {{else}}
+                <button class="btn btn-success" id="btn-like" data-id="{{video._id}}"><i class="fas fa-thumbs-up"></i><span class="likes-count"> {{video.likes}}</span></button>
+                {{/if}}
+            </div>
         </div>
         <div class="card-body p-0 ml-2">
             <div class="dropdown-divider"></div>
-            <div>
+            <div class="d-flex justify-content-between align-items-center p-2">
                 <h3><a href="/channel/{{channel.channel}}">{{channel.channel}}</a></h3>
                 <h4>{{channel.subscribers}} suscriptores || <a href="">Suscribirse</a></h4>
             </div>
             <div class="dropdown-divider"></div>
-            <div class="accordion" id="accordionExample"></div>
-                <div class="card">
-                    <div class="card-body" id="headingOne">
+            <div class="card">
+                <div class="card-body" id="headingOne">
                     <h2 class="mb-0">
-                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Mostrar descripción
+                        <button class="btn btn-info" type="button" id="btn-toggle-description">
+                            <span id="description-btn">Mostrar descripción</span>
                         </button>
                     </h2>
-                    </div>
-                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                    <div class="card-body">
-                        {{video.description}}
-                    </div>
-                    </div>
                 </div>
+                <div class="card-body" id="description">
+                    {{video.description}}
+                </div>
+            </div>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="card mt-2">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>Comentarios</h3>
+                <button class="btn btn-info" id="btn-toggle-comment">
+                    <i class="fa fa-comment-o"></i> Comentar
+                </button>
+            </div>
+            <div class="card-body">
+                <blockquote id="post-comment">
+                    {{#if logged}}
+                    <form action="/video/{{id}}/comment" method="POST">
+                        <div class="form-group">
+                            <textarea class="form-control" name="comment" rows="2" placeholder="Comentario" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success" id="btn-comment">
+                                <i class="fa fa-comment"></i> Publicar
+                            </button>
+                        </div>
+                    </form>
+                    {{else}}
+                    <div>
+                        <a href="/signin">Inicia sesion</a> para comentar
+                    </div>
+                    {{/if}}
+                </blockquote>
+                <div class="dropdown-divider"></div>
+                <ul class="list-group p-4">
+                    {{#each comments}}
+                    <div class="list-group-item">
+                        <div class="row">
+                            <a href="/channel/{{user_channel}}" class="col text-center">{{username}}</a>
+                            <blockquote class="col">
+                                <p class="lead">{{comment}}</p>
+                                <footer class="blockquote-footer">
+                                    {{timeago posted_at}}
+                                </footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                    {{/each}}
+                </ul>
             </div>
         </div>
     </div>

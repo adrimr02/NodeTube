@@ -8,17 +8,21 @@ const users = require('../controllers/users');
 
 router.get('/', home.main);
 router.get('/subscriptions');
+router.get('/settings', users.settings);
 router.get('/video/:id', channel.video);
 router.get('/view/:id', channel.view);
-router.get('/settings', users.settings);
+router.post('/video/:id/like', channel.like);
+router.post('/video/:id/comment', channel.comment);
 
 //CHANNEL
 router.get('/channel/:name', channel.channel);
 router.get('/channel/:name/videos', channel.channelVideos);
 router.get('/channel/:name/info', channel.channelInfo);
+router.get('/channel/:name/settings', channel.channelSettings);
+router.post('/channekl/:name/subscribe', channel.subscribe);
 router.get('/new-video', channel.newVideo);
 router.post('/new-video', channel.uploadVideo);
-router.get('/delete/:id', channel.deleteVideo);
+router.delete('/video/delete/:id', channel.deleteVideo);
 
 
 //USERS
